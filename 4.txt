@@ -1,0 +1,196 @@
+🧩 Practical 4 – Set 2: Process Log (Full Log + Process Search)
+🎯 Objective:
+
+To read and display all process logs, and allow the user to search how many times a particular process was invoked.
+
+⚙️ Step-by-Step Commands (Ubuntu)
+🔹 Step 1: Move to Desktop
+cd ~/Desktop
+
+🔹 Step 2: Create a Log Folder
+mkdir -p ~/Desktop/Log
+
+🔹 Step 3: Create a Process Log File
+nano ~/Desktop/Log/ProcessLog
+
+🔹 Step 4: Paste Sample Log Data
+
+(You can use any real process data if available, or this sample for demonstration)
+
+PID USER   %CPU  %MEM  COMMAND
+101 root   45.3  0.8   firefox
+102 user1  32.5  1.2   chrome
+103 user2  12.1  0.5   mysql
+104 user1   8.2  0.4   code
+105 user1   4.0  0.3   bash
+106 user1   2.5  0.2   sshd
+107 user2   1.8  0.2   snapd
+108 user2   1.2  0.1   python3
+109 root    0.8  0.1   systemd
+110 root    0.4  0.1   rsyslogd
+105 user1   4.0  0.3   bash
+106 user1   2.5  0.2   sshd
+
+
+Save & Exit:
+
+Ctrl + O → Enter  
+Ctrl + X
+
+🔹 Step 5: Create Your Script
+nano analyze_process_log.sh
+
+🔹 Step 6: Paste This Code 👇
+#!/bin/bash
+# Practical 4 - Set 2 (Full Log View + Process Count)
+
+# Path to log file
+LOG_FILE=~/Desktop/Log/ProcessLog
+
+# Check if log file exists
+if [ ! -f "$LOG_FILE" ]; then
+    echo "Log file not found at: $LOG_FILE"
+    exit 1
+fi
+
+echo "========= FULL PROCESS LOG ========="
+cat "$LOG_FILE"  # Display all process logs
+echo "===================================="
+echo ""
+
+echo "======== PROCESS INVOCATION SEARCH ========"
+read -p "Enter the process name to search: " PROC_NAME
+
+# Search for process and count occurrences
+COUNT=$(grep -cw "$PROC_NAME" "$LOG_FILE")
+
+if [ $COUNT -gt 0 ]; then
+    echo "The process '$PROC_NAME' has been invoked $COUNT time(s)."
+else
+    echo "The process '$PROC_NAME' was not found in the log."
+fi
+
+🔹 Step 7: Save and Exit
+Ctrl + O → Enter  
+Ctrl + X
+
+🔹 Step 8: Make Script Executable
+chmod +x analyze_process_log.sh
+
+🔹 Step 9: Run the Script
+./analyze_process_log.sh
+
+🧠 When Prompted:
+Enter the process name to search: bash
+
+✅ Output Example:
+========= FULL PROCESS LOG =========
+PID USER   %CPU  %MEM  COMMAND
+101 root   45.3  0.8   firefox
+102 user1  32.5  1.2   chrome
+103 user2  12.1  0.5   mysql
+104 user1   8.2  0.4   code
+105 user1   4.0  0.3   bash
+106 user1   2.5  0.2   sshd
+107 user2   1.8  0.2   snapd
+108 user2   1.2  0.1   python3
+109 root    0.8  0.1   systemd
+110 root    0.4  0.1   rsyslogd
+105 user1   4.0  0.3   bash
+106 user1   2.5  0.2   sshd
+====================================
+
+======== PROCESS INVOCATION SEARCH ========
+Enter the process name to search: bash
+The process 'bash' has been invoked 2 time(s).
+
+✅ Summary:
+Step	Command	Purpose
+1️⃣	cd ~/Desktop	Go to Desktop
+2️⃣	mkdir -p ~/Desktop/Log	Create Log folder
+3️⃣	nano ~/Desktop/Log/ProcessLog	Create process log file
+4️⃣	nano analyze_process_log.sh	Create script
+5️⃣	chmod +x analyze_process_log.sh	Make script executable
+6️⃣	./analyze_process_log.sh	Run and view logs
+🧠 Viva Short Answer:
+
+“Sir/Ma’am, this script reads the complete process log file and displays all entries.
+Then it allows the user to enter a process name (like bash or mysql) and counts how many times it appears.
+This demonstrates event correlation, as we link multiple occurrences of the same event (process) across logs.”
+
+
+
+
+🧩 SET 1: Log Capturing Script
+⚙️ Purpose:
+
+To display Boot, MySQL, Kernel, and Mail logs from Linux system using shell scripting.
+
+🧠 Step-by-Step Setup (Ubuntu Terminal)
+🔹 Step 1: Go to Desktop
+cd ~/Desktop
+
+🔹 Step 2: Create Script File
+nano log_capture.sh
+
+🔹 Step 3: Paste the Code
+#!/bin/bash
+# Practical No. 4 – Set 1
+# Script to Display Various System Logs
+
+echo "================= BOOT LOG ================="
+sudo dmesg | less
+
+echo "================= MYSQL LOG ================="
+if [ -f /var/log/mysql/error.log ]; then 
+    sudo less /var/log/mysql/error.log
+else
+    echo "MySQL log file not found at /var/log/mysql/error.log"
+fi
+
+echo "================= KERNEL LOG ================="
+if [ -f /var/log/kern.log ]; then 
+    sudo less /var/log/kern.log
+else
+    echo "Kernel log file not found at /var/log/kern.log"
+fi
+
+echo "================= MAIL LOG ================="
+if [ -f /var/log/mail.log ]; then 
+    sudo less /var/log/mail.log
+else
+    echo "Mail log file not found at /var/log/mail.log"
+fi
+
+🔹 Step 4: Save & Exit
+Ctrl + O → Enter  
+Ctrl + X
+
+🔹 Step 5: Make Script Executable
+chmod +x log_capture.sh
+
+🔹 Step 6: Run the Script
+sudo ./log_capture.sh
+
+
+🧠 While running:
+
+Use ↑ ↓ arrows to scroll logs
+
+Press q to quit each log view and move to next
+
+✅ Expected Output:
+================= BOOT LOG =================
+[    0.000000] Linux version 5.15.0-88-generic ...
+...
+================= MYSQL LOG =================
+MySQL log file not found at /var/log/mysql/error.log
+
+================= KERNEL LOG =================
+Oct 06 10:22:00 kernel: usb 1-1: new high-speed USB device ...
+
+================= MAIL LOG =================
+Mail log file not found at /var/log/mail.log
+
+
+✅ Result: Displayed Boot, Kernel, Mail, and MySQL logs successfully
