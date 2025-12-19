@@ -1,5 +1,5 @@
 🧩 Practical 4 – Set 2: Process Log (Full Log + Process Search)
-🎯 Objective:
+🎯 Objective:m
 
 To read and display all process logs, and allow the user to search how many times a particular process was invoked.
 
